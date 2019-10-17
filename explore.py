@@ -9,10 +9,17 @@ def wrapper(path):
     return requests.get("https://goteborgsvarvet.propublik.se/"+path, allow_redirects=False)
 
 async def main():
-    paths = []
+    initial_len = 1
+    paths = [c for c in string.ascii_lowercase]
+    for i in range(initial_len-1):
+        extension = []
+        for path in paths:
+            extension.extend([ c + path for c in chars ])
+        paths = extension
+    print(paths)
     paths.extend([c for c in string.ascii_lowercase])
     while True:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=16) as executor:
             loop = asyncio.get_event_loop()
             futures = [
                 loop.run_in_executor(
